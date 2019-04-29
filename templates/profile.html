@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<style>
+ 
+    .button {
+        padding-left: 40px;
+        padding-right: 40px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        margin-left: 7%;
+    }
+    
+    
+
+</style>
+
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/winwincss.css') }}">
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+  <title>Profile</title>
+</head>
+
+
+<body>
+  <div class="main">
+    <p class="sign" align="center">Profile</p>
+
+    <form>
+    Name: <input type="text" name="name"><br><br>
+    Email: <input type="text" name="email"><br><br>
+    Major: <input type="text" name="major"><br><br>
+    Year: <input type="text" name="year"><br><br>
+    </form>
+    <br>
+    <br>
+      <a href="./dashboard" class="button">Dashboard</a>   
+    </div>
+</body>
+
+</html>

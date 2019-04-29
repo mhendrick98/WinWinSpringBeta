@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+
+<style>
+
+    .button {
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        margin-left: 7%;
+        display:inline-block;
+    }
+    
+</style>
+
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/winwincss.css') }}">
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+<title>Add Classes</title>
+</head>
+
+<body>
+  <div class="main">
+
+    <p class="sign" align="center">Classes Menu</p>
+
+    <table style="width:80%">
+  <tr>
+    <th>College</th>
+    <th>Dept</th>
+    <th>Course</th>
+  </tr>
+  <tr>
+    <td>CAS</td>
+    <td>CH</td>
+    <td>101</td>
+  </tr>
+  <tr>
+    <td>CAS</td>
+    <td>MA</td>
+    <td>123</td>  
+  </tr>
+  <tr>
+    <td>CAS</td>
+    <td>WR</td>
+    <td>150</td>  
+ </tr>
+</table>
+
+<br>
+
+<form>
+  Enter class details:<br>
+  <input type="text" name="XXX XX XXX">
+</form>
+<br>
+<br>
+  <a class="button">Add</a>
+  <a class="button">Remove</a>
+  <a href="./dashboard" class="button">Dashboard</a>     
+    </div>
+</body>
+
+</html>

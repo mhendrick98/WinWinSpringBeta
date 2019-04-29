@@ -1,0 +1,1 @@
+const rce = React.createElement;

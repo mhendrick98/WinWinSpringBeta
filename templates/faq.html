@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<style>
+
+    .main {
+        height: 850px;
+    }
+
+
+
+
+    .submit {
+        margin-left: 33%;
+        font-size: 13px;
+    }
+
+
+
+</style>
+<head>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/winwincss.css') }}">
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+  <title>Frequently Asked Questions</title>
+</head>
+
+<body>
+  <div class="main">
+      {% if error %}
+          <p class="error" align="center">skjdhfhsdfj</p>
+      {% else %}
+          <p class="sign" align="center">Frequently Asked Questions</p>
+      {% endif %}
+      <p class="signSmaller" align="center">What is this app?</p>
+      <p class="un" align="center">Thanks for asking! This is an applcication that helps <b>you</b> meet new friends and
+      form study groups here at Boston University!</p>
+
+      <p class="signSmaller" align="center">How does it work?</p>
+      <p class="un" align="center">It's simple! You provide us with some basic contact information, your courses, and when you're free,
+      while we take care of the rest! If we find you a match, we'll send you an email and you can work on your coursework together!</p>
+
+      <p class="signSmaller" align="center">Who made this?</p>
+      <p class="un" align="center">This project was developed by Zach Halvorson and Michael Hendrick in the Fall of 2018. Created
+      with the goal of bringing Boston University students together, WinWin represents what it means to create an inclusive
+      community in the chaotic environment that is college.</p>
+
+      <br>
+      <br>
+
+      <a href="./dashboard" class="submit">Dashboard</a>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,53 @@
+#myDropdown{
+	width: 400px;
+	margin: 0 auto 0 auto;
+}
+
+#availablecourses{
+	width: 100%;
+	height: 400px;
+	overflow: scroll;
+	overflow-x: hidden;
+}
+
+#availablecourses button{
+	width: 100%;
+	background: #B896C5;
+	background: -webkit-gradient(linear, left top, left bottom, from(#DCC7E3), to(#B896C5));
+	background: -webkit-linear-gradient(top, #DCC7E3, #B896C5);
+	background: -moz-linear-gradient(top, #DCC7E3, #B896C5);
+	background: -ms-linear-gradient(top, #DCC7E3, #B896C5);
+	background: -o-linear-gradient(top, #DCC7E3, #B896C5);
+	padding: 19.5px 39px;
+	-webkit-border-radius: 13px;
+	-moz-border-radius: 13px;
+	border-radius: 13px;
+	-webkit-box-shadow: rgba(0,0,0,1) 0 1px 0;
+	-moz-box-shadow: rgba(0,0,0,1) 0 1px 0;
+	box-shadow: rgba(0,0,0,1) 0 1px 0;
+	text-shadow: rgba(0,0,0,.4) 0 1px 0;
+	color: #000000;
+	font-size: 23px;
+}
+#availablecourses button:hover {
+	border-top-color: #FEFDFF;
+	background: #FEFDFF;
+	color: #000000;
+}
+
+
+
+#inputField{
+	width:100%;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+	font-size: 20px;
+}
+
+@media screen and (max-width: 450px) {
+	#myDropdown{
+		width:100%;
+	}
+    
+}

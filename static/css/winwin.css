@@ -1,0 +1,90 @@
+body{
+    background-color: #F3EBF6;
+    font-family: 'Ubuntu', sans-serif;
+}
+#react_window_container{
+    margin: 10px 20px 10px 20px;
+}
+#react_menu_container{
+    position: absolute;
+	height: inherit;
+	width: inherit;
+}
+.window{
+    background-color: #FEFCFD;
+    width: 90%;
+    height: 800px;
+    border-radius: 1.5em;
+    box-shadow: 0px 11px 35px 2px rgba(0, 0, 0, 0.14);
+	margin: auto auto auto auto;
+}
+
+.openmenu{
+	font-size: 30px;
+	cursor: pointer;
+	margin: 5px 0px 0px 10px;
+}
+.navWrap{
+	position: absolute;
+	height: inherit;
+	width: inherit;
+}
+
+.overlay {
+	height: inherit;
+	width: 0%;
+	position: relative;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	background-color: #7b4e8d;
+	opacity: 0.75;
+	overflow-x: hidden;
+	transition: 0.5s;
+    border-radius: 1.5em;
+
+}
+
+.overlay-content {
+	position: relative;
+	top: 25%;
+	width: 100%;
+	text-align: center;
+	margin-top: 30px;
+}
+
+.overlay a {
+	padding: 8px;
+	text-decoration: none;
+	font-size: 36px;
+	color: #FEFCFD;
+	display: block;
+	transition: 0.3s;
+}
+
+.overlay a:hover, .overlay a:focus {
+	color: #BFCDE0;
+}
+
+.overlay .closebtn {
+	position: absolute;
+	top: 20px;
+	right: 45px;
+	font-size: 60px;
+}
+
+.nonoverlay {
+	position: relative;
+	top: 0px;
+	left: 0px;
+}
+
+@media screen and (max-width: 450px) {
+	.overlay a {font-size: 20px}
+	.overlay .closebtn {
+		font-size: 40px;
+		top: 15px;
+		right: 35px;
+	}
+    
+}
