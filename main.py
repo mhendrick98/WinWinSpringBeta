@@ -5,6 +5,7 @@ from wtforms import StringField, PasswordField
 from wtforms.validators import Email, Length, InputRequired
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from stableMatching import find_matches
 
 
 
@@ -34,9 +35,12 @@ class User(UserMixin, db.Document):
     meta = {'collection': 'accounts'}
     name = db.StringField()
     email = db.StringField(max_length=30)
-    all_classes = db.StringField() # Ex: CS112,CS131, etc.
-    is_matched = db.StringField() # Ex: 1,0,1,0 etc.
-    member_groups = db.StringField() # Ex: 2342,12321,43435, etc.
+    all_classes = db.DictField()
+
+class Groups(UserMixin, db.Document):
+    meta = {'collection': 'groups'}
+    group_id = db.IntField()
+    members = db.ListField()
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -79,7 +83,7 @@ def signup():
             if existing_email is not None:
                 return render_template('signup.html', form=form, error="Email taken")  # We should return a pop up error msg as well account taken
             else:
-                newUser = User(name=form.name.data, email=form.email.data, all_classes="",is_matched="", member_groups="").save()
+                newUser = User(name=form.name.data, email=form.email.data, all_classes={}).save()
                 login_user(newUser)
                 return render_template('courseSelect.html', form=classesForm())
         return render_template('signup.html', form=form) #We should return a pop up error msg as well bad input
@@ -99,7 +103,7 @@ def courseSelect():
     form = classesForm()
     if request.method == 'GET':
         toPassIn = ""
-        for x in current_user.all_classes.split(","):
+        for x in list(current_user.all_classes.keys()):
             toPassIn += "<p>"+ x +"</p>"
         return render_template('courseSelect.html', form=form, curr_classes=toPassIn)
     else:
@@ -113,10 +117,24 @@ def courseSelect():
         temp = temp.strip()
         temp = temp.split(",")
         temp = list(set(temp))
-        temp = ",".join(temp)
-        current_user.all_classes=temp
+        new_dict = current_user.all_classes
+        for x in temp:
+            if x not in new_dict:
+                new_dict[x] = -1
+        current_user.all_classes = new_dict
         current_user.save()
-        return render_template('courseSelect.html', form=form, user=current_user)
+        all_students = []
+        all_groups = {}
+        get_users = User.objects()
+        get_groups = Groups.objects()
+        for g in get_users:
+            all_students.append(g.to_mongo().to_dict())
+        for d in get_groups:
+            all_groups[d.group_id] = d.members
+        s, g = find_matches(all_students, all_groups)
+        print(s)
+        print(g)
+        return render_template('dashboard.html', form=form, user=current_user)
 
 
 @app.route("/feedback")
