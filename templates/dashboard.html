@@ -51,7 +51,7 @@ $( document ).ready(function() {
 			    <td>{{ item[0] }}</td>
 					<td>{{ ", ".join(item[1]) }}</td>
 					<td><a href="mailto:{{','.join(item[1])}}?subject=Study%20Session%20(Via%20WinWin)%20&body=Hi%20all,%0d%0dNice%20to%20meet%20you%20all!%20When%20are%20you%20guys%20free%20to%20meet%20up?%0d%0dHere's%20to%20us%20killing%20this%20exam!%0dBest,%0d" rel="EMAIL"><button type="button">Send an email!</button></a></td>
-					<td><button type="button" class="outtaHere" value="{{item[0]}}">Yeah, I'm out!</button></td>
+					<td><button type="button" class="submit outtaHere" value="{{item[0]}}">Yeah, I'm out!</button></td>
 			  </tr>
 				{% endfor %}
 			</table>

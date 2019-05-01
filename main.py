@@ -126,14 +126,22 @@ def faq():
 @app.route("/courseSelect", methods=['GET', 'POST'])
 def courseSelect():
     form = classesForm()
+    toPassIn = ""
+    for x in list(current_user.all_classes.keys()):
+        toPassIn += "<p>"+ x +"</p>"
     if request.method == 'GET':
-        toPassIn = ""
-        for x in list(current_user.all_classes.keys()):
-            toPassIn += "<p>"+ x +"</p>"
         return render_template('courseSelect.html', form=form, curr_classes=toPassIn)
     else:
         #Formatting hell but trust it works
         temp = form.classes.data
+        if(" " not in temp):
+            return render_template('courseSelect.html', form=form, curr_classes=toPassIn, error="Make sure the format is College *space* DeptCourseNumber")
+        all_courses = []
+        course_file = open("./static/data/courses.txt","r")
+        contents = course_file.readlines()
+        for line in contents:
+            all_courses.append(" ".join(line.split(" ")[:2]))
+        course_file.close()
         temp = temp.replace("<p>", ",")
         temp = temp.replace("</p>", ",")
         temp = temp.replace(",,", ",")
@@ -142,6 +150,9 @@ def courseSelect():
         temp = temp.strip()
         temp = temp.split(",")
         temp = list(set(temp))
+        for t in temp:
+            if(t not in all_courses):
+                return render_template('courseSelect.html', form=form, curr_classes=toPassIn, error="Course not found :( Check your formatting!")
         new_dict = current_user.all_classes
         for x in temp:
             if x not in new_dict:
@@ -165,6 +176,7 @@ def courseSelect():
                 Groups.objects(group_id=group).update_one(members=g[group])
             else:
                 Groups(group_id=group, members=g[group]).save()
+
         # for a in User.objects():
         #     print(a.name, a.email, a.all_classes)
         # for b in Groups.objects():
