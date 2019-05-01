@@ -5,8 +5,8 @@ from wtforms import StringField, PasswordField
 from wtforms.validators import Email, Length, InputRequired
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from stableMatching import find_matches
-import env
+from .stableMatching import find_matches
+from .env import *
 import smtplib
 
 
@@ -217,7 +217,7 @@ def feedback():
     return render_template('feedback.html')
 
 @app.route("/debug")
-def feedback():
+def debug():
     return "hello debug"
 
 @app.route("/jquery-1.11.2.min.js")
