@@ -3,10 +3,11 @@
 
 var fs = require('fs');
 var textByLine = fs.readFileSync('static/data/courses.txt').toString().split("\n");
+console.log(textByLine);
 
 
 function makeInner() {
-	const values = 
+	const values =
 		rce("option", {
 			value: toString(i),
 		}, "courseName"),
@@ -28,7 +29,7 @@ class courseDrop extends React.Component {
 	constructor(props) {
 		super(props);
 	}
-	
+
 	render() {
 		return makeInner();
 	}

@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect, url_for
 from flask_mongoengine import MongoEngine, Document
 from flask_wtf import FlaskForm, CsrfProtect
 from wtforms import StringField, PasswordField
@@ -54,6 +54,9 @@ class RegForm(FlaskForm):
 class LogInForm(FlaskForm):
     email = StringField('email',  validators=[InputRequired(), Length(max=30)])
 
+class DeleteForm(FlaskForm):
+    toDelete = StringField('toDelete',  validators=[InputRequired(), Length(max=30)])
+
 class classesForm(FlaskForm):
     classes = StringField('classes', validators=[InputRequired()])
 
@@ -63,13 +66,13 @@ def home():
     form = LogInForm()
     if request.method == 'GET':
         if current_user.is_authenticated == True:
-            return render_template('dashboard.html',user=current_user)
+            return redirect(url_for('dashboard'))
         return render_template('home.html', form=form)
     else:
-        check_user = User.objects(username=form.username.data).first()
+        check_user = User.objects(email=form.email.data).first()
         if check_user:
             login_user(check_user)
-            return render_template('dashboard.html', user=current_user)
+            return redirect(url_for('dashboard'))
         return render_template('home.html', form=form, error="Username doesn't exist!")
 
 @app.route("/signup", methods=['GET', 'POST'])
@@ -85,13 +88,35 @@ def signup():
             else:
                 newUser = User(name=form.name.data, email=form.email.data, all_classes={}).save()
                 login_user(newUser)
-                return render_template('courseSelect.html', form=classesForm())
+                return redirect(url_for('courseSelect'))
         return render_template('signup.html', form=form) #We should return a pop up error msg as well bad input
 
 @login_required
-@app.route("/dashboard")
+@app.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
-    return render_template('dashboard.html', user=current_user)
+    form = DeleteForm()
+    if request.method == "GET":
+        member_groups = list(current_user.all_classes.values())
+        class_to_members = {}
+        another_one = {}
+        class_emails = {}
+        for group in Groups.objects():
+            if group.group_id in member_groups:
+                class_to_members[group.group_id] = group.members
+        classes = list(current_user.all_classes.keys())
+        for c in classes:
+            another_one[c] = class_to_members[current_user.all_classes[c]]
+        return render_template('dashboard.html', user=current_user, classes = another_one.items(), form = form)
+    else:
+        remove = form.toDelete.data
+        new_classes = current_user.all_classes
+        id_of_group = current_user.all_classes[remove]
+        curr_group = Groups.objects(group_id=id_of_group).first()
+        curr_group.members.remove(current_user.email)
+        Groups.objects(group_id=id_of_group).update_one(members=curr_group.members)
+        del new_classes[remove]
+        User.objects(email=current_user.email).update_one(all_classes=new_classes)
+        return redirect(url_for('dashboard'))
 
 @app.route("/faq")
 def faq():
@@ -132,9 +157,19 @@ def courseSelect():
         for d in get_groups:
             all_groups[d.group_id] = d.members
         s, g = find_matches(all_students, all_groups)
-        print(s)
-        print(g)
-        return render_template('dashboard.html', form=form, user=current_user)
+        for student in s:
+            User.objects(email=student["email"]).update_one(all_classes=student["all_classes"])
+        for group in g.keys():
+            group_exists = Groups.objects(group_id=group).first()
+            if group_exists:
+                Groups.objects(group_id=group).update_one(members=g[group])
+            else:
+                Groups(group_id=group, members=g[group]).save()
+        # for a in User.objects():
+        #     print(a.name, a.email, a.all_classes)
+        # for b in Groups.objects():
+        #     print(b.group_id, b.members)
+        return redirect(url_for('dashboard'))
 
 
 @app.route("/feedback")
@@ -154,7 +189,7 @@ def pickerFix():
 def logout():
     logout_user()
     form = RegForm()
-    return render_template('home.html', form=form)
+    return redirect(url_for('home'))
 
 
 if __name__ == "__main__":

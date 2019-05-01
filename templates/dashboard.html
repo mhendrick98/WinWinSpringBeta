@@ -9,6 +9,8 @@
 	<script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
 	<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
 	<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
 
 	<script src="{{ url_for('static', filename='js/frontend.js') }}" type='text/javascript'></script>
 	<script src="{{ url_for('static', filename='js/overlay.js') }}" type='text/javascript'></script>
@@ -16,6 +18,15 @@
 	<title>Dashboard</title>
 </head>
 
+<script>
+$( document ).ready(function() {
+    $('.outtaHere').click(function (event) {
+					alert("If you want to be rematched, readd the class in the course select!")
+					$("#deletedClass").val($(this).val());
+          $('#deleteForm').submit();
+        });
+});
+</script>
 <body>
 
 
@@ -32,13 +43,27 @@
 			  <tr>
 			    <th>Class</th>
 			    <th>Group Member Emails</th>
+					<th>Contact Group</th>
+					<th>Want to Leave?</th>
 			  </tr>
-				{% for item in user.all_classes.keys() %}
+				{% for item in classes %}
 			  <tr>
-			    <td>{{ item }}</td>
+			    <td>{{ item[0] }}</td>
+					<td>{{ ", ".join(item[1]) }}</td>
+					<td><a href="mailto:{{','.join(item[1])}}?subject=Study%20Session%20(Via%20WinWin)%20&body=Hi%20all,%0d%0dNice%20to%20meet%20you%20all!%20When%20are%20you%20guys%20free%20to%20meet%20up?%0d%0dHere's%20to%20us%20killing%20this%20exam!%0dBest,%0d" rel="EMAIL"><button type="button">Send an email!</button></a></td>
+					<td><button type="button" class="outtaHere" value="{{item[0]}}">Yeah, I'm out!</button></td>
 			  </tr>
 				{% endfor %}
 			</table>
+			<div style="display:none;">
+			<form action="/dashboard" method="post" id="deleteForm">
+	        {{ form.toDelete(class_="input", placeholder="classes", id="deletedClass")}}
+	        {{ form.hidden_tag() }}
+	      <br>
+	      <br>
+	      <input type="submit" class="submit" align="center" value="Submit">
+	    </form>
+		</div>
 		</div>
 	</div>
 	<script src="{{ url_for('static', filename='js/react_window.js') }}" type='text/javascript'></script>

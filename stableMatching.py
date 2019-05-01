@@ -1,5 +1,5 @@
 import random
-#
+# #
 # students= [
 #     {
 #         "name": "Michael",
@@ -103,18 +103,18 @@ def find_matches(students, all_groups):
                     students[i]["all_classes"][x] = new_group
     return students, all_groups
 
-
-
-
-def print_pretty(students):
-    for s in students:
-        print(s)
-
-def print_groups(groups):
-    for g in list(groups.keys()):
-        print(g, groups[g])
-
-# students, all_groups = find_matches(students)
+# 
+#
+#
+# def print_pretty(students):
+#     for s in students:
+#         print(s)
+#
+# def print_groups(groups):
+#     for g in list(groups.keys()):
+#         print(g, groups[g])
+#
+# students, all_groups = find_matches(students, all_groups)
 # print_pretty(students)
 # print_groups(all_groups)
 
