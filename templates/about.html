@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/winwin.css') }}">
+	<link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+	<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+	<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+	
+	<script src="{{ url_for('static', filename='js/frontend.js') }}" type='text/javascript'></script>
+	<script src="{{ url_for('static', filename='js/overlay.js') }}" type='text/javascript'></script>
+	
+	<title>About</title>
+</head>
+
+<body>
+
+
+	
+	<div class="window">
+
+		<div id="react_menu_container"></div>
+
+
+		<div class="nonoverlay">
+			<span class="openmenu" onclick="openNav()">&#9776; Menu</span>
+			<div id="react_window_container">
+			<h1>About</h1>
+			<p>This app was developed through BU Spark! Product Innovation Course: CAS CS491 from Fall 2018 to Spring 2019. It matches students with their peers using a modified Gale-Shapley algorithm, which ensures that all students get matched with their best fit.</p>
+			<p>The current release is a limited version, dedicated just for finals period, to allow us to gain user feedback for the full implementation that will be released in the Fall of 2019. The full-featured app will include the ability to select your free time on a weekly basis, in order to find study groups throughout the whole semester that are more likely to match your schedule.</p>
+			
+			</div>
+		</div>
+	</div>
+	<script src="{{ url_for('static', filename='js/react_menu.js') }}" type='text/javascript'></script>
+     
+</body>
+
+</html>

@@ -117,8 +117,8 @@ def signup():
                 return redirect(url_for('courseSelect'))
         return render_template('signup.html', form=form) #We should return a pop up error msg as well bad input
 
-@login_required
 @app.route("/dashboard", methods=["GET", "POST"])
+@login_required
 def dashboard():
     form = DeleteForm()
     if request.method == "GET":
@@ -148,8 +148,8 @@ def dashboard():
 def faq():
     return render_template('faq.html')
 
-@login_required
 @app.route("/courseSelect", methods=['GET', 'POST'])
+@login_required
 def courseSelect():
     form = classesForm()
     toPassIn = ""
@@ -168,8 +168,8 @@ def courseSelect():
         for line in contents:
             all_courses.append(" ".join(line.split(" ")[:2]))
         course_file.close()
-        temp = temp.replace("<p>", ",")
-        temp = temp.replace("</p>", ",")
+        temp = temp.replace("<P>", ",")
+        temp = temp.replace("</P>", ",")
         temp = temp.replace(",,", ",")
         temp = temp[1:]
         temp = temp[:-1]
@@ -223,6 +223,11 @@ def jQueryFix():
 @app.route("/picker.js")
 def pickerFix():
     return render_template('picker.js')
+
+@app.route("/about")
+def about():
+    return render_template('about.html')
+
 
 @app.route('/logout', methods = ['GET'])
 @login_required
