@@ -141,7 +141,6 @@ $( document ).ready(function() {
 
     $('#submit_form').click(function (event) {
 				$( "#addedcourses" ).append( "<p>" + $("#addMe").val()+"</p>" );
-				alert($('#addedcourses').html());
         if($('#addedcourses').html() == ''){
             alert( "You didn't add any courses!" );
             event.preventDefault();

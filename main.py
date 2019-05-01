@@ -6,6 +6,9 @@ from wtforms.validators import Email, Length, InputRequired
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from stableMatching import find_matches
+from . import env
+import smtplib
+
 
 
 
@@ -22,11 +25,11 @@ csrf.init_app(app)
 
 app.config['MONGODB_SETTINGS'] = {
     'db': 'testWinWin',
-    'host': 'mongodb://localhost:27017/testWinWinBeta'
+    'host': env.MONGO_URI
 }
 
 db = MongoEngine(app)
-app.config['SECRET_KEY'] = '_no_one_cared_til_i_put_on_the_mask_'
+app.config['SECRET_KEY'] = env.SECRET
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = '/'
@@ -60,6 +63,29 @@ class DeleteForm(FlaskForm):
 class classesForm(FlaskForm):
     classes = StringField('classes', validators=[InputRequired()])
 
+
+def send_emails(to):
+    try:
+        gmail_user = env.GMAIL_USER
+        gmail_password = env.GMAIL_PASS
+        sent_from = gmail_user
+
+        #email_text = "Did you get this??"
+        email_text = 'Subject: {}\nTo: {}\n\n{}'.format("New Match with BU Study Group!", ", ".join(to), "Hey!\n\nHead over to www.bustudygroup.com to see a new match for one of your classes!\n\nHappy Finals!\n-BU Study Group Team")
+        # email_text = """\
+        # From: %s
+        # To: %s     #
+        # %s
+        # """ % (sent_from, ", ".join(to), subject, body)
+
+        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+        server.ehlo()
+        server.login(gmail_user, gmail_password)
+        server.sendmail(sent_from, to, email_text)
+        server.close()
+        print('Email sent!')
+    except:
+        print('Something went wrong...')
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
@@ -133,7 +159,7 @@ def courseSelect():
         return render_template('courseSelect.html', form=form, curr_classes=toPassIn)
     else:
         #Formatting hell but trust it works
-        temp = form.classes.data
+        temp = form.classes.data.upper()
         if(" " not in temp):
             return render_template('courseSelect.html', form=form, curr_classes=toPassIn, error="Make sure the format is College *space* DeptCourseNumber")
         all_courses = []
@@ -173,6 +199,8 @@ def courseSelect():
         for group in g.keys():
             group_exists = Groups.objects(group_id=group).first()
             if group_exists:
+                if group_exists.members != g[group] and len(g[group]) > 1:
+                    send_emails(g[group])
                 Groups.objects(group_id=group).update_one(members=g[group])
             else:
                 Groups(group_id=group, members=g[group]).save()
