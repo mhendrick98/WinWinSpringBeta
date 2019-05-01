@@ -218,7 +218,7 @@ def feedback():
 
 @app.route("/debug")
 def feedback():
-    return return "hello debug"
+    return "hello debug"
 
 @app.route("/jquery-1.11.2.min.js")
 def jQueryFix():
