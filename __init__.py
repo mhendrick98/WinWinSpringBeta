@@ -216,6 +216,10 @@ def courseSelect():
 def feedback():
     return render_template('feedback.html')
 
+@app.route("/debug")
+def feedback():
+    return return "hello debug"
+
 @app.route("/jquery-1.11.2.min.js")
 def jQueryFix():
     return render_template('jquery-1.11.2.min.js')
