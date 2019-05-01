@@ -6,7 +6,7 @@ from wtforms.validators import Email, Length, InputRequired
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from stableMatching import find_matches
-from . import env
+import env
 import smtplib
 
 
