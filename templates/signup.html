@@ -60,6 +60,7 @@ $( document ).ready(function() {
     <form class="form1" action="/signup" method="post" id="registerForm">
         {{ form.email(class_="input", placeholder="Email", id="email")}}
         {{ form.name(class_="input", placeholder="Name", id="name")}}
+        {{ form.password(class_="input", placeholder="Password", id="password")}}
         {{ form.hidden_tag() }}
       <br>
       <br>

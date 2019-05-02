@@ -151,6 +151,7 @@ $( document ).ready(function() {
       {% endif %}
     <form class="form1" action="/" method="post" id="loginForm">
         {{ form.email(class_="un", placeholder="Email", id="email")}}
+				{{ form.password(class_="pass", placeholder="Password", id="password")}}
         {{ form.hidden_tag() }}
 
       <input type="submit" class="submit" align="center" value="Log In">

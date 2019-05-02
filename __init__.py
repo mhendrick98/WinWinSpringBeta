@@ -16,7 +16,6 @@ import smtplib
 Each mako page needs to be designed in a way that more closely represents our mockups
 '''
 
-
 app = Flask(__name__)
 
 csrf = CsrfProtect()
@@ -34,10 +33,22 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = '/'
 
+# class RemoteUserMiddleware(object):
+#     def __init__(self, app):
+#         self.app = app
+#     def __call__(self, environ, start_response):
+#         user = environ.pop('HTTP_X_PROXY_REMOTE_USER', None)
+#         environ['REMOTE_USER'] = user
+#         return self.app(environ, start_response)
+#
+# app.wsgi_app = RemoteUserMiddleware(app.wsgi_app)
+
+
 class User(UserMixin, db.Document):
     meta = {'collection': 'accounts'}
     name = db.StringField()
     email = db.StringField(max_length=30)
+    password = db.StringField()
     all_classes = db.DictField()
 
 class Groups(UserMixin, db.Document):
@@ -53,9 +64,11 @@ def load_user(user_id):
 class RegForm(FlaskForm):
     name = StringField('name',  validators=[InputRequired(), Length(max=30)])
     email = StringField('email',  validators=[InputRequired(), Email(message='Invalid email'), Length(max=30)])
+    password = PasswordField('password', validators=[InputRequired(), Length(min=8, max=20)])
 
 class LogInForm(FlaskForm):
     email = StringField('email',  validators=[InputRequired(), Length(max=30)])
+    password = PasswordField('password', validators=[InputRequired(), Length(min=8, max=20)])
 
 class DeleteForm(FlaskForm):
     toDelete = StringField('toDelete',  validators=[InputRequired(), Length(max=30)])
@@ -97,8 +110,10 @@ def home():
     else:
         check_user = User.objects(email=form.email.data).first()
         if check_user:
-            login_user(check_user)
-            return redirect(url_for('dashboard'))
+            if check_password_hash(check_user['password'], form.password.data):
+                login_user(check_user)
+                return redirect(url_for('dashboard'))
+            return render_template('home.html', form=form, error="Incorrect password!")
         return render_template('home.html', form=form, error="Username doesn't exist!")
 
 @app.route("/signup", methods=['GET', 'POST'])
@@ -112,7 +127,8 @@ def signup():
             if existing_email is not None:
                 return render_template('signup.html', form=form, error="Email taken")  # We should return a pop up error msg as well account taken
             else:
-                newUser = User(name=form.name.data, email=form.email.data, all_classes={}).save()
+                hashpass = generate_password_hash(form.password.data, method='sha256')
+                newUser = User(name=form.name.data, email=form.email.data,password=hashpass, all_classes={}).save()
                 login_user(newUser)
                 return redirect(url_for('courseSelect'))
         return render_template('signup.html', form=form) #We should return a pop up error msg as well bad input
@@ -218,7 +234,28 @@ def feedback():
 
 @app.route("/debug")
 def debug():
-    return "hello debug"
+    return str(request.headers)
+
+@app.route("/postAuth", methods=["POST"])
+def postAuth():
+    if request.methods == "POST":
+        return "ayooooooo"
+
+
+@app.route("/dlogin", methods=["POST"])
+def dlogin():
+    return str(request.environ)
+
+# @app.route("/Shibboleth.sso/SAML2/POST", methods=['GET', 'POST'])
+# def bad_code():
+#     if request.method == "POST":
+#         return str(request.environ)
+#     else:
+#         return "nope"
+
+@app.route("/shibddebug")
+def shibddebug():
+    return str(request.headers)
 
 @app.route("/jquery-1.11.2.min.js")
 def jQueryFix():
