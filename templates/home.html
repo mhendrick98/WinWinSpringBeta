@@ -158,6 +158,13 @@ $( document ).ready(function() {
       <a href="./signup" class="submit" align="center">Register<a>
      </form>
 
+		 <datalist id="languages">
+			 {% for item in classes %}
+		  <option value="{{ item }}"></option>
+			 {% endfor %}
+		</datalist>
+
+		 <input type="text" list="languages">
     </div>
 
 </body>

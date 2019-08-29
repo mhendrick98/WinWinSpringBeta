@@ -5,8 +5,8 @@ from wtforms import StringField, PasswordField
 from wtforms.validators import Email, Length, InputRequired
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from .stableMatching import find_matches
-from .env import *
+from stableMatching import find_matches
+import env
 import smtplib
 
 
@@ -97,8 +97,8 @@ def send_emails(to):
         server.sendmail(sent_from, to, email_text)
         server.close()
         print('Email sent!')
-    except:
-        print('Something went wrong...')
+    except Exception as e:
+        print('Something went wrong...', e)
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
@@ -106,7 +106,14 @@ def home():
     if request.method == 'GET':
         if current_user.is_authenticated == True:
             return redirect(url_for('dashboard'))
-        return render_template('home.html', form=form)
+        all_courses = []
+        course_file = open("./static/data/courses.txt","r")
+        contents = course_file.readlines()
+        for line in contents:
+            y = (" ".join(line.split(" ")[:2])).replace("\n", "")
+            y = y[:6] + " " + y[6:9]
+            all_courses.append(y)
+        return render_template('home.html', form=form, classes=set(all_courses))
     else:
         check_user = User.objects(email=form.email.data).first()
         if check_user:
